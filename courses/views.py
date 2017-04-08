@@ -16,3 +16,8 @@ def course_detail(request, pk):
     # request comes in automatically and pk needs to be provided
     return render(request, 'courses/course_detail.html', {'course': course})
 
+
+def step_detail(request, course_pk, step_pk):
+    step = get_object_or_404(models.Step, course_id = course_pk, pk = step_pk)
+    return render(request, 'courses/step_detail.html', {'step': step})
+
