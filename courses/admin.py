@@ -2,4 +2,16 @@ from django.contrib import admin
 
 from . import models
 
-admin.site.register(models.Course)
+
+class StepInLine(admin.StackedInline):
+    model = models.Step
+    # This creates an inline, which we can then use
+
+
+class CourseAdmin(admin.ModelAdmin):
+    inlines = [StepInLine,]
+
+
+admin.site.register(models.Course, CourseAdmin)
+# Register Course as CourseAdmin
+admin.site.register(models.Step)
