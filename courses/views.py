@@ -5,7 +5,8 @@ from . import models
 
 def course_list(request):
     courses = models.Course.objects.all()
-    return render(request, 'courses/course_list.html', {'courses': courses})
+    email = 'urosh43@gmail.com'
+    return render(request, 'courses/course_list.html', {'courses': courses, 'email': email})
     # context dictionary
 
 

@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
+{% load static %}
 
+{% block static %}<link rel="stylesheet" href="{% static 'courses/css/courses.css' %}">{% endblock %}
 {% block title %}Available Courses{% endblock %}
 
 {% block content %}
@@ -8,9 +10,17 @@
             <div class="card">
                 <header><a href="{% url 'courses:detail' pk=course.pk %}">{{ course.title }}</a></header>
                 <div class="card-copy">
-                    {{ course.description }}
+                    {% if course.description|wordcount <= 5 %}
+                        {{ course.description }}
+                    {% else %}
+                        {{ course.description|truncatewords:5 }}
+                        <a href="{% url 'courses:detail' pk=course.pk %}">Read more</a>
+                    {% endif %}
+                    <div>Created on: {{ course.created_at|date:'F j, Y' }}</div>
                 </div>
             </div>
         {% endfor %}
     </div>
+    <div>Have questions? Feel free to contact me at: {{ email|urlize }}</div>
+    <!--urlize automatically links as mailto if it is an email, otherwise it will be treated as a link.-->
 {% endblock %}
