@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load humanize %}
+{% load course_extras %}
 
 {% block title %}
     {{ course.title }}
@@ -8,7 +9,7 @@
 {% block content %}
 <article>
     <h2>{{ course.title }}</h2>
-    {{ course.description }}
+    {{ course.description|markdown_to_html }}
     <p>There are {{ course.step_set.all.count|apnumber }} course{{ course.step_set.all.count|pluralize }} in this
         course: {{ course.step_set.all|join:", " }}</p>
 

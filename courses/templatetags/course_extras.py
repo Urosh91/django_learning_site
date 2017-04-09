@@ -1,4 +1,6 @@
 from django import template
+from django.utils.safestring import mark_safe
+import markdown2
 
 from courses.models import Course
 
@@ -20,3 +22,17 @@ def nav_courses():
 
 # Inclusion tag returns a data as a whole other template, not just a string. So where ever this tag gets used it will
 # include the given template also
+
+
+@register.filter('time_estimate')
+def time_estimate(word_count):
+    '''Estimates the number of minutes it will take to complete the step based on the passed-in word count'''
+    minutes = round(word_count/20)
+    return minutes
+
+
+@register.filter('markdown_to_html')
+def markdown_to_html(markdown_text):
+    '''Converts markdown text to HTML'''
+    html_body = markdown2.markdown(markdown_text)
+    return mark_safe(html_body)
