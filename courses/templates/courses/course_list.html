@@ -1,27 +1,26 @@
-{% extends 'layout.html' %}
-{% load static %}
-{% load course_extras %}
+{% extends "courses/layout.html" %}
 
-{% block static %}<link rel="stylesheet" href="{% static 'courses/css/courses.css' %}">{% endblock %}
-{% block title %}Available Courses{% endblock %}
+{% block title %}All{% endblock %}
 
 {% block content %}
-    <div class="cards">
-        {% for course in courses %}
-            <div class="card">
-                <header><a href="{% url 'courses:detail' pk=course.pk %}">{{ course.title }}</a></header>
-                <div class="card-copy">
-                    {% if course.description|wordcount <= 5 %}
-                        {{ course.description|markdown_to_html }}
-                    {% else %}
-                        {{ course.description|markdown_to_html|truncatewords:5 }}
-                        <a href="{% url 'courses:detail' pk=course.pk %}">Read more</a>
-                    {% endif %}
-                    <div>Created on: {{ course.created_at|date:'F j, Y' }}</div>
+    <div class="row columns">
+        {{ block.super }}
+    </div>
+    <div class="row">
+        {%  for course in courses %}
+            <div class="small-6 columns">
+                <div class="callout">
+                    <h5><a href="{% url 'courses:detail' pk=course.pk %}">{{ course.title }}</a></h5>
+                    <div class="card-copy">
+                        {{ course.description }}
+                    </div>
                 </div>
             </div>
+
+            {% if forloop.counter|divisibleby:"2" %}
+                </div>
+                <div class="row">
+            {% endif %}
         {% endfor %}
     </div>
-    <div>Have questions? Feel free to contact me at: {{ email|urlize }}</div>
-    <!--urlize automatically links as mailto if it is an email, otherwise it will be treated as a link.-->
 {% endblock %}
