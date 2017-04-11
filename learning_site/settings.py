@@ -124,3 +124,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
     # BASE_DIR is a base directory, which in this case is out-most learning_site dir
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'suggestions')
