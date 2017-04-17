@@ -79,6 +79,8 @@ class QuizAdmin(admin.ModelAdmin):
 
     list_display = ['title', 'total_questions']
 
+    actions = ['delete_selected']
+
 
 class TextAdmin(admin.ModelAdmin):
     # fields = ['course', 'title', 'description', 'order', 'content']
@@ -95,4 +97,5 @@ admin.site.register(models.Quiz, QuizAdmin)
 admin.site.register(models.MultipleChoiceQuestion, QuestionAdmin)
 admin.site.register(models.TrueFalseQuestion, QuestionAdmin)
 admin.site.register(models.Answer)
+admin.site.disable_action('delete_selected')
 
