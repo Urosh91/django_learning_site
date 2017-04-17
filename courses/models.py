@@ -2,6 +2,14 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
+import math
+
+STAUS_CHOICE = (
+    ('i', 'In Progress'),
+    ('r', 'In review'),
+    ('p', 'Published'),
+)
+
 
 class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -9,9 +17,14 @@ class Course(models.Model):
     description = models.TextField()
     teacher = models.ForeignKey(User)
     subject = models.CharField(default='', max_length=100)
+    status = models.CharField(max_length=1, choices=STAUS_CHOICE, default='i')
 
     def __str__(self):
         return self.title
+
+    def time_to_complete(self):
+        from courses.templatetags import course_extras
+        return f'{course_extras.time_estimate(len(self.description.split()))} min.'
 
 
 class Step(models.Model):

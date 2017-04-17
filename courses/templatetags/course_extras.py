@@ -21,7 +21,7 @@ def nav_courses():
     return {'courses': courses}
 
 # Inclusion tag returns a data as a whole other template, not just a string. So where ever this tag gets used it will
-# include the given template also
+# includes the given template also
 
 
 @register.filter('time_estimate')

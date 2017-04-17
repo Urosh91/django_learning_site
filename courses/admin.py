@@ -4,6 +4,12 @@ from datetime import date
 from . import models
 
 
+def make_published(modeladmin, request, queryset):
+    queryset.update(status='p')
+
+make_published.short_description = 'Mark selected courses as Published'
+
+
 class TextInLine(admin.StackedInline):
     model = models.Text
     # This creates an inline, which we can then use
@@ -13,7 +19,7 @@ class QuizInLine(admin.StackedInline):
     model = models.Quiz
 
 
-class AnswerInLine(admin.StackedInline):
+class AnswerInLine(admin.TabularInline):
     model = models.Answer
 
 
@@ -49,7 +55,11 @@ class CourseAdmin(admin.ModelAdmin):
 
     list_filter = ['created_at', 'teacher', YearListFilter,]
 
-    list_display = ['title', 'created_at']
+    list_display = ['title', 'created_at', 'time_to_complete', 'status']
+
+    list_editable = ['status']
+
+    actions = [make_published]
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -57,7 +67,11 @@ class QuestionAdmin(admin.ModelAdmin):
 
     search_fields = ['prompt']
 
-    list_display = ['prompt', 'quiz']
+    list_display = ['prompt', 'quiz', 'order']
+
+    list_editable = ['quiz', 'order']
+
+    radio_fields = {'quiz': admin.HORIZONTAL}
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -65,9 +79,18 @@ class QuizAdmin(admin.ModelAdmin):
 
     list_display = ['title', 'total_questions']
 
+
+class TextAdmin(admin.ModelAdmin):
+    # fields = ['course', 'title', 'description', 'order', 'content']
+
+    fieldsets = (
+        (None, {'fields': (('course', 'title',), 'order', 'description')}),
+        ('Add content', {'fields': ('content',), 'classes': ('collapse',)}),
+    )
+
 admin.site.register(models.Course, CourseAdmin)
 # Register Course as CourseAdmin
-admin.site.register(models.Text)
+admin.site.register(models.Text, TextAdmin)
 admin.site.register(models.Quiz, QuizAdmin)
 admin.site.register(models.MultipleChoiceQuestion, QuestionAdmin)
 admin.site.register(models.TrueFalseQuestion, QuestionAdmin)
